@@ -6,89 +6,12 @@ A collection of sorting algorithms
     - https://en.wikipedia.org/wiki/Merge_sort
 3. Bubble sort
     - https://en.wikipedia.org/wiki/Bubble_sort
+4. Max-heap sort
+    - https://www.geeksforgeeks.org/python-program-for-heap-sort/
 
 Author: Matthew R. DeVerna
 """
 from utils import check_array
-
-def _max_heapify(given_array, n, i):
-    """
-    Transform **inplace** `given_array` into a max-heap array ordering.
-        Note: This is only meant to be utilized within `max_heap_sort`.
-
-    Parameters:
-    ----------
-    - given_array (list) : the array to transform
-    - n (int) : the size of the array
-    - i (int) : index of largest element (initialized as root (i.e., 0))
-
-    Exceptions:
-    ----------
-    - TypeError
-    """
-    # Ensure array is a list and contains only numeric values
-    check_array(given_array)
-
-    if not isinstance(n,int):
-        raise TypeError(f"`n` must be an integer. Currently it is <{type(n)}>")
-    if not isinstance(i,int):
-        raise TypeError(f"`i` must be an integer. Currently it is <{type(i)}>")
-
-    largest = i           # Initialize largest as root
-    l_idx = 2 * i + 1     # left = 2*i + 1
-    r_idx = 2 * i + 2     # right = 2*i + 2
-
-    # If the left child is not the last node and it
-    # is > the current largest element --> set new `largest` index
-    if (l_idx < n) and (given_array[i] < given_array[l_idx]):
-        largest = l_idx
-
-    # If the right child is not at the last node and it
-    # is > the current largest element --> set new `largest` index
-    if (r_idx < n) and (given_array[largest] < given_array[r_idx]):
-        largest = r_idx
-
-    # If we have a new largest node, switch it with the root
-    if largest != i:
-        given_array[i], given_array[largest] = given_array[largest], given_array[i]
-
-        # Heapify the root.
-        _max_heapify(given_array, n, largest)
-
-def max_heap_sort(given_array):
-    """
-    Sort `given_array` **inplace** in ascending order by first converting it
-    to a max-heap structure.
-
-    Source: https://www.geeksforgeeks.org/python-program-for-heap-sort/
-
-    Complexity:
-    ----------
-    - O(nlogn)
-
-    Parameters:
-    ----------
-    - given_array (list) : the array to sort
-
-    Exceptions:
-    ----------
-    - TypeError
-    """
-    # Ensure array is a list and contains only numeric values
-    check_array(given_array)
-
-    n = len(given_array)
-
-    # Build a maxheap.
-    # Since last parent will be at ((n//2)-1) we can start at that location.
-    last_parent_idx = (n // 2) - 1
-    for i in range(last_parent_idx, -1, -1):
-        _max_heapify(given_array, n, i)
-
-    # One by one extract elements
-    for i in range(n-1, 0, -1):
-        given_array[i], given_array[0] = given_array[0], given_array[i]
-        _max_heapify(given_array, i, 0)
 
 def insertion_sort(given_array):
     """
@@ -227,3 +150,80 @@ def bubble_sort(given_array):
         for j in range(n-i-1):
             if(given_array[j] > given_array[j+1]):
                 given_array[j], given_array[j+1] = given_array[j+1], given_array[j]
+
+def _max_heapify(given_array, n, i):
+    """
+    Transform **inplace** `given_array` into a max-heap array ordering.
+        Note: This is only meant to be utilized within `max_heap_sort`.
+
+    Parameters:
+    ----------
+    - given_array (list) : the array to transform
+    - n (int) : the size of the array
+    - i (int) : index of largest element (initialized as root (i.e., 0))
+
+    Exceptions:
+    ----------
+    - TypeError
+    """
+    # Ensure array is a list and contains only numeric values
+    check_array(given_array)
+
+    if not isinstance(n,int):
+        raise TypeError(f"`n` must be an integer. Currently it is <{type(n)}>")
+    if not isinstance(i,int):
+        raise TypeError(f"`i` must be an integer. Currently it is <{type(i)}>")
+
+    largest = i           # Initialize largest as root
+    l_idx = 2 * i + 1     # left = 2*i + 1
+    r_idx = 2 * i + 2     # right = 2*i + 2
+
+    # If the left child is not the last node and it
+    # is > the current largest element --> set new `largest` index
+    if (l_idx < n) and (given_array[i] < given_array[l_idx]):
+        largest = l_idx
+
+    # If the right child is not at the last node and it
+    # is > the current largest element --> set new `largest` index
+    if (r_idx < n) and (given_array[largest] < given_array[r_idx]):
+        largest = r_idx
+
+    # If we have a new largest node, switch it with the root
+    if largest != i:
+        given_array[i], given_array[largest] = given_array[largest], given_array[i]
+
+        # Heapify the root.
+        _max_heapify(given_array, n, largest)
+
+def max_heap_sort(given_array):
+    """
+    Sort `given_array` **inplace** in ascending order by first converting it
+    to a max-heap structure.
+
+    Complexity:
+    ----------
+    - O(nlogn)
+
+    Parameters:
+    ----------
+    - given_array (list) : the array to sort
+
+    Exceptions:
+    ----------
+    - TypeError
+    """
+    # Ensure array is a list and contains only numeric values
+    check_array(given_array)
+
+    n = len(given_array)
+
+    # Build a maxheap.
+    # Since last parent will be at ((n//2)-1) we can start at that location.
+    last_parent_idx = (n // 2) - 1
+    for i in range(last_parent_idx, -1, -1):
+        _max_heapify(given_array, n, i)
+
+    # One by one extract elements
+    for i in range(n-1, 0, -1):
+        given_array[i], given_array[0] = given_array[0], given_array[i]
+        _max_heapify(given_array, i, 0)
