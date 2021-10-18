@@ -14,12 +14,13 @@ from utils import check_array
 def _max_heapify(given_array, n, i):
     """
     Transform **inplace** `given_array` into a max-heap array ordering.
+        Note: This is only meant to be utilized within `max_heap_sort`.
 
     Parameters:
     ----------
     - given_array (list) : the array to transform
     - n (int) : the size of the array
-    - i (int) : index of largest element
+    - i (int) : index of largest element (initialized as root (i.e., 0))
 
     Exceptions:
     ----------
