@@ -59,6 +59,8 @@ def max_heap_sort(given_array):
     Sort `given_array` **inplace** in ascending order by first converting it
     to a max-heap structure.
 
+    Source: https://www.geeksforgeeks.org/python-program-for-heap-sort/
+
     Complexity:
     ----------
     - O(nlogn)
