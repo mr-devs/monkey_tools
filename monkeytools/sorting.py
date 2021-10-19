@@ -1,13 +1,17 @@
 """
 A collection of sorting algorithms
-1. Insertion sort
-    - https://en.wikipedia.org/wiki/Insertion_sort
-2. Merge sort
-    - https://en.wikipedia.org/wiki/Merge_sort
-3. Bubble sort
-    - https://en.wikipedia.org/wiki/Bubble_sort
-4. Max-heap sort
-    - https://www.geeksforgeeks.org/python-program-for-heap-sort/
+
+Included sorting algorithims:
+    1. Insertion sort
+        - https://en.wikipedia.org/wiki/Insertion_sort
+    2. Merge sort
+        - https://en.wikipedia.org/wiki/Merge_sort
+    3. Bubble sort
+        - https://en.wikipedia.org/wiki/Bubble_sort
+    4. Max-heap sort
+        - https://www.geeksforgeeks.org/python-program-for-heap-sort/
+    5. Quick-sort
+        - https://www.geeksforgeeks.org/python-program-for-quicksort/
 
 Author: Matthew R. DeVerna
 """
@@ -227,3 +231,93 @@ def max_heap_sort(given_array):
     for i in range(n-1, 0, -1):
         given_array[i], given_array[0] = given_array[0], given_array[i]
         _max_heapify(given_array, i, 0)
+
+def _partition(given_array, low, high):
+    """
+    A method for partitioning an array (inplace) into two groups.
+    The last value of `given_array` is used to put all elements
+    of lower (or equal) value on the left of that element and all elements
+    of higher value on the right of that element.
+
+    Note: Meant to be utilized within the `quick_sort` function but can
+        be used on it's own
+
+    Parameters:
+    ----------
+    - given_array (list) : the array to be paritioned
+    - low (int) : the lowest value index (typically zero)
+    - high (int) : the highest value index (typically, len(given_array)-1)
+
+    Exceptions:
+    ----------
+    - TypeError
+    """
+    # Ensure array is a list and contains only numeric values
+    check_array(given_array)
+
+    if not isinstance(low,int):
+        raise TypeError(f"`low` must be an integer. Currently it is <{type(low)}>")
+    if not isinstance(high,int):
+        raise TypeError(f"`high` must be an integer. Currently it is <{type(high)}>")
+
+    # 1 minus the lowest index to
+    #   know where we are in the given_arrayay
+    i = low-1
+
+    # Pivot element to compare other elements too
+    pivot = given_array[high]
+
+    for j in range(low,high):
+
+        # If jth item is less than or equal to pivot element, swap them
+        #   and increment `i` by one
+        if given_array[j] <= pivot:
+            i += 1
+            given_array[j], given_array[i] = given_array[i], given_array[j]
+
+    # Swap the pivot into it's proper position
+    #   now that everything is sorted
+    given_array[i+1], given_array[high] = given_array[high], given_array[i+1]
+    return (i+1)
+
+def quick_sort(given_array, low, high):
+    """
+    Sort (inplace) `given_array` using the quick sort algorithm.
+
+    Complexity:
+    ----------
+    - Worst: O(n^2)
+        - Occurs when the partition process always picks the
+        greatest or smallest element as pivot
+    - Average: O(nlogn)
+
+    Parameters:
+    ----------
+    - given_array (list) : the array to be paritioned
+    - low (int) : the lowest value index (typically zero)
+    - high (int) : the highest value index (typically, len(given_array)-1)
+
+    Exceptions:
+    ----------
+    - TypeError
+    """
+    # Ensure array is a list and contains only numeric values
+    check_array(given_array)
+
+    if not isinstance(low,int):
+        raise TypeError(f"`low` must be an integer. Currently it is <{type(low)}>")
+    if not isinstance(high,int):
+        raise TypeError(f"`high` must be an integer. Currently it is <{type(high)}>")
+
+    if len(given_array) == 1:
+        return given_array
+    if low < high:
+
+        # piv is partitioning index, given_array[p] is now
+        # at right place
+        piv = _partition(given_array, low, high)
+
+        # Separately sort elements before
+        # partition and after partition
+        quick_sort(given_array, low, piv-1)
+        quick_sort(given_array, piv+1, high)
