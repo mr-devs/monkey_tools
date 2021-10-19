@@ -11,7 +11,7 @@ A collection of sorting algorithms
 
 Author: Matthew R. DeVerna
 """
-from utils import check_array
+from .utils import check_array
 
 def insertion_sort(given_array):
     """

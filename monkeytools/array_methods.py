@@ -5,7 +5,7 @@ A collection of array-based algorithms
 
 Author: Matthew R. DeVerna
 """
-from utils import check_array
+from .utils import check_array
 
 def max_subarray_kadane(given_array):
     """
