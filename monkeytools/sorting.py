@@ -15,6 +15,8 @@ Included sorting algorithims:
 
 Author: Matthew R. DeVerna
 """
+import warnings
+
 from .utils import check_array
 
 def insertion_sort(given_array):
@@ -62,8 +64,9 @@ def merge_sort(given_array):
     """
     Implement the **merge sort** algorithm to sort `given_array` in place.
 
-    Sorts `given_array` by recursively dividing the it into two smaller
-    lists, sorting those, and then merging them all back together later.
+    Sort `given_array` **inplace** in ascending order by recursively dividing
+    the it into two smaller lists, sorting those, and then merging them all back
+    together later.
 
     Complexity:
     ----------
@@ -123,7 +126,8 @@ def merge_sort(given_array):
 
 def bubble_sort(given_array):
     """
-    Implement the **bubble sort** algorithm to sort `given_array` in place.
+    Implement the **bubble sort** algorithm to sort `given_array` in place in 
+    ascending order.
 
     Repeatedly steps through a list, comparing adjacent elements, and
     swapping them if they are in the wrong order.
@@ -282,7 +286,7 @@ def _partition(given_array, low, high):
 
 def quick_sort(given_array, low, high):
     """
-    Sort (inplace) `given_array` using the quick sort algorithm.
+    Sort `given_array` **inplace** in ascending order using the quick sort algorithm.
 
     Complexity:
     ----------
@@ -321,3 +325,53 @@ def quick_sort(given_array, low, high):
         # partition and after partition
         quick_sort(given_array, low, piv-1)
         quick_sort(given_array, piv+1, high)
+
+def counting_sort(given_array):
+    """
+    Sort `given_array` in ascending order via the counting sort algorithm.
+    Only accepts positive numbers
+
+    Complexity:
+    ----------
+    - O(n) - only when the maximum value in `given_array` is < len(given_array)*2
+
+    Parameters:
+    ----------
+    - given_array : a sequence to be sorted
+    """
+    # Ensure array is a list and contains only numeric values
+    check_array(given_array)
+
+    if any(val<0 for val in given_array):
+        raise TypeError("This function does not support negative values.")
+
+    # Set needed parameters and lists
+    max_val = max(given_array)
+    count_arr = [0] * (max_val+1)
+    new_arr = [0] * len(given_array)
+
+    # Throw complexity warning
+    if max_val >= len(given_array)*2:
+        warnings.warn(
+            "\nCOMPLEXITY WARNING:\n"
+            "The maximum value within the provided array "
+            "is > len(array)*2 so running time will "
+            "no longer be O(n)."
+        )
+
+    # Here we increment one for given_array[idx] in count_arr[idx]
+    for idx in range(0, len(given_array)):
+        count_arr[given_array[idx]] = count_arr[given_array[idx]] + 1
+
+    # With the above list, we  determine how many
+    # elements are less than or equal idx by keeping a running sum
+    for idx in range(1,max_val+1):
+        count_arr[idx] = count_arr[idx] + count_arr[idx-1]
+
+    # Place each element given_array[idx] into its correct
+    # sorted position in the `new_arr`
+    for idx in range(len(given_array)-1,-1,-1):
+        new_arr[count_arr[given_array[idx]]-1] = given_array[idx]
+        count_arr[given_array[idx]] = count_arr[given_array[idx]]-1
+
+    return new_arr
