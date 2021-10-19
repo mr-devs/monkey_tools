@@ -7,7 +7,7 @@ with open("README.md") as f:
 
 setup(
     name="monkeytools",
-    version="0.2",
+    version="0.4",
     description="A personal collection of algorithms and tools for the standard code monkey.",
     long_description=long_description,
     long_description_content_type="text/markdown",
